@@ -1,0 +1,113 @@
+CREATE TABLE AccessProfiles
+(
+ EmpClass VARCHAR2(20) PRIMARY KEY,
+ ExecLounge VARCHAR2(2),
+ ExecWashroom VARCHAR2(2),
+ SupplyCloset VARCHAR2(2),
+ EmpLounge  VARCHAR2(2), 
+ ServerRoom VARCHAR2(2)
+);
+
+delete from empaccess;
+SELECT * FROM empaccess;
+insert into accessprofiles values ('manager','a','a','n','n','n');
+insert into accessprofiles values ('adminassitants','a','n','a','a','n');
+insert into accessprofiles values ('itemployees','n','n','n','a','a');
+insert into accessprofiles values ('clerk','n','n','a','a','n');
+insert into accessprofiles values ('collegiateinterns','n','n','n','a','n');
+insert into accessprofiles values ('maintenancecrew','a','a','a','a','a');
+insert into accessprofiles values ('visitors','n','n','n','n','n');
+
+
+drop Table EmpAccess;
+CREATE TABLE EmpAccess
+(
+ EmpID NUMBER(3) PRIMARY KEY,
+ LName VARCHAR2(25),
+ YrsOfSvc NUMBER(2),
+ EmpClass  VARCHAR(20), 
+ CONSTRAINT empid1_fk FOREIGN KEY (EmpClass)
+    REFERENCES AccessProfiles (EmpClass)
+);
+
+Insert into EmpAccess values (101,'Papas',8,'manager');
+Insert into EmpAccess values (102,'George',8,'clerk');
+Insert into EmpAccess values (103,'Davidson',22,'visitors');
+Insert into EmpAccess values (104,'Rodriguez',4,'clerk');
+Insert into EmpAccess values (105,'Smithers',13,'itemployees');
+Insert into EmpAccess values (106,'Ramirez',15,'visitor');
+Insert into EmpAccess values (107,'Ahmed',5,'manager');
+Insert into EmpAccess values (999,'Kaushik',14,'manager');
+Insert into EmpAccess values (203,'Smith',11,'collegiateinterns');
+Insert into EmpAccess values (202,'Adams',6,'maintenancecrew');
+Insert into EmpAccess values (322,'Mazard',10,'adminassitants');
+Insert into EmpAccess values (381,'Reed',18,'visitors');
+Insert into EmpAccess values (382,'Isaac',2,'manager');
+Insert into EmpAccess values (108,'Daksh',18,'clerk');
+Insert into EmpAccess values (120,'Louis',11,'visitors');
+Insert into EmpAccess values (128,'Nate',33,'visitors');
+
+
+Select * from EmpAccess;
+
+
+
+
+CREATE TABLE RealTimeTracking
+(
+ AccessID NUMBER (5) PRIMARY KEY,
+ EmployeeID NUMBER(5),
+ TimeCurrent DATE,
+ loc VARCHAR2(20),
+ CONSTRAINT empid1 FOREIGN KEY (EmployeeID)
+ REFERENCES EmpAccess(EmpID)
+ 
+);
+
+insert into realtimetracking values(1111,101,to_date('2015-01-01' ,'yy-mm-dd'),'comm');
+insert into realtimetracking values(1112,101,to_date('2016-01-01' ,'yy-mm-dd'),'guns');
+insert into realtimetracking values(1113,101,to_date('2015-01-07' ,'yy-mm-dd'),'kacek');
+
+CREATE TABLE RealTracking
+(
+ Trackno NUMBER (5) PRIMARY KEY,
+ Emploid NUMBER(5),
+ Location VARCHAR2(20),
+ CONSTRAINT empid1l FOREIGN KEY (Emploid)
+ REFERENCES EmpAccess(EmpID)
+ 
+);
+
+
+
+
+
+select * from realtimetracking; 
+select * from realtracking;
+drop table RealTimeTracking;
+
+
+
+insert into realtracking values(1,102,'commons');
+insert into realtracking values(2,103,'center court');
+commit work;
+
+
+
+
+INSERT INTO errortable (dateupdated,table1id)
+VALUES (to_date(to_char(sysdate,'dd/mon/yyyy hh24:mi:ss'), 'dd/mm/yyyy hh24:mi:ss' ),1083 );
+SELECT LNAME AS LASTNAME FROM EMPACCESS LEFT JOIN ACCESSPROFILES ON EMPACCESS.EMPCLASS = ACCESSPROFILES.EMPCLASS WHERE ACCESSPROFILES.SERVERROOM = 'n';
+
+
+SELECT LNAME AS LASTNAME FROM EMPACCESS JOIN ACCESSPROFILES USING(EMPCLASS) WHERE (ACCESSPROFILES.SERVERROOM ='a') OR (ACCESSPROFILES.EXECLOUNGE ='a');
+
+
+
+SELECT COUNT(LASTNAME) AS EmployeeCount FROM (SELECT LNAME AS LASTNAME FROM EMPACCESS JOIN ACCESSPROFILES ON EMPACCESS.EMPCLASS = ACCESSPROFILES.EMPCLASS WHERE EMPACCESS.EMPCLASS = 'collegiateinterns');
+
+
+SELECT LNAME AS LASTNAME FROM EMPACCESS WHERE LNAME LIKE 'L%' OR LNAME LIKE 'N%';
+
+
+commit work;
